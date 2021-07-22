@@ -82,29 +82,29 @@ func extractFullErrorMessage(e error, includeStack bool) string {
 	var ok bool
 	var lastClErr error
 	errMsg := bytes.NewBuffer(make([]byte, 0, 1024))
-	razerErr := e
+	rzerr := e
 	for {
-		_, ok := razerErr.(StackTracer)
+		_, ok := rzerr.(StackTracer)
 		if ok {
-			lastClErr = razerErr
+			lastClErr = rzerr
 		}
 
-		errorWithFormat, ok := razerErr.(ErrorFormatter)
+		errorWithFormat, ok := rzerr.(ErrorFormatter)
 		if ok {
 			errMsg.WriteString(errorWithFormat.GetFormattedMessage())
 		}
 
-		errorCauser, ok := razerErr.(causer)
+		errorCauser, ok := rzerr.(causer)
 		if ok {
 			innerErr := errorCauser.Cause()
 			if innerErr == nil {
 				break
 			}
-			razerErr = innerErr
+			rzerr = innerErr
 		} else {
 			// We have reached the end and traveresed all inner errors.
 			// Add last message and exit loop.
-			errMsg.WriteString(razerErr.Error())
+			errMsg.WriteString(rzerr.Error())
 			break
 		}
 		errMsg.WriteString(", ")
