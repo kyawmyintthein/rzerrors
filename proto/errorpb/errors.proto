@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package errorpb;
+
+
+// Defines the import path that should be used to import the generated package
+// and the package name
+option go_package = "github.com/kyawmyintthein/rzerrors/proto;errorpb";
+
+message ErrorMessage {
+  int32 httpStatusCode = 1;
+  string message = 2;
+  string messageDescription = 3;
+  repeated string args = 4;
+  string debugInfo = 5;
+}
