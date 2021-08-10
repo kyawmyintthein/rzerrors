@@ -182,6 +182,5 @@ func ConvertTwirpError(err error) twirp.Error {
 		errorID := errorWithID.ID()
 		twirpErr = twirpErr.WithMeta("error_id", errorID)
 	}
-	twirpErr = twirpErr.WithMeta("debug_info", GetErrorMessagesWithStack(err))
 	return twirpErr
 }
