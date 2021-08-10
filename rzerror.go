@@ -168,7 +168,7 @@ func ConvertTwirpError(err error) twirp.Error {
 	errorDescription := err.Error()
 	errorWithTwirpCode, ok := err.(TwirpError)
 	if ok {
-		twirpErrorCode = errorWithTwirpCode.Code()
+		twirpErrorCode = errorWithTwirpCode.ErrorCode()
 	}
 
 	errorWithFormatter, ok := err.(ErrorFormatter)
