@@ -176,12 +176,12 @@ func ConvertTwirpError(err error) twirp.Error {
 		errorDescription = errorWithFormatter.GetFormattedMessage()
 	}
 
-	twipErr := twirp.WrapError(twirp.NewError(twirpErrorCode, errorDescription), err)
+	twirpErr := twirp.WrapError(twirp.NewError(twirpErrorCode, errorDescription), err)
 	errorWithID, ok := err.(ErrorID)
 	if ok {
 		errorID := errorWithID.ID()
-		twipErr.WithMeta("error_id", errorID)
+		twirpErr = twirpErr.WithMeta("error_id", errorID)
 	}
-	twipErr.WithMeta("debug_info", GetErrorMessagesWithStack(err))
-	return twipErr
+	twirpErr = twirpErr.WithMeta("debug_info", GetErrorMessagesWithStack(err))
+	return twirpErr
 }
