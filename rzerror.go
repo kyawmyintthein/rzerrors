@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/kyawmyintthein/rzerrors/proto/errorpb"
+	"github.com/twitchtv/twirp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -160,4 +161,27 @@ func ConvertGRPCStatusError(err error) error {
 		DebugInfo:          GetErrorMessagesWithStack(err),
 	})
 	return stat.Err()
+}
+
+func ConvertTwirpError(err error) twirp.Error {
+	twirpErrorCode := twirp.Internal
+	errorDescription := err.Error()
+	errorWithTwirpCode, ok := err.(TwirpError)
+	if ok {
+		twirpErrorCode = errorWithTwirpCode.Code()
+	}
+
+	errorWithFormatter, ok := err.(ErrorFormatter)
+	if ok {
+		errorDescription = errorWithFormatter.GetFormattedMessage()
+	}
+
+	twipErr := twirp.WrapError(twirp.NewError(twirpErrorCode, errorDescription), err)
+	errorWithID, ok := err.(ErrorID)
+	if ok {
+		errorID := errorWithID.ID()
+		twipErr.WithMeta("error_id", errorID)
+	}
+	twipErr.WithMeta("debug_info", GetErrorMessagesWithStack(err))
+	return twipErr
 }
