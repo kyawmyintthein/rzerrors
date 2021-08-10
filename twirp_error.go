@@ -5,7 +5,7 @@ import (
 )
 
 type TwirpError interface {
-	Code() twirp.ErrorCode
+	ErrorCode() twirp.ErrorCode
 }
 
 type ErrorWithTwirpCode struct {
@@ -18,6 +18,6 @@ func NewErrorWithTwirpCode(errCode twirp.ErrorCode) *ErrorWithTwirpCode {
 	}
 }
 
-func (err *ErrorWithTwirpCode) GRPCCode() twirp.ErrorCode {
+func (err *ErrorWithTwirpCode) ErrorCode() twirp.ErrorCode {
 	return err.code
 }
